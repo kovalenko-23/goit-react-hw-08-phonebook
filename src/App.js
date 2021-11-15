@@ -5,6 +5,7 @@ import AppBar from './Components/AppBar/AppBar';
 import operationsAuth from './redux/auth/auth-operations';
 import PrivateRoute from './Components/PrivateRoute';
 import PublickRoute from './Components/PublickRoute';
+import authSelectors from './redux/auth/auth-selectors';
 
 const HomePageView = lazy(() =>
   import('./views/HomePageView' /*webpackChunkName: "home-view"*/),
@@ -21,53 +22,61 @@ const LoginView = lazy(() =>
 
 export function App() {
   const dispatch = useDispatch();
-  const isFetchingCurrentUser = useSelector(state => state.authReducer.isFetchingCurrentUser);
+  const isFetchingCurrentUser = useSelector(
+    authSelectors.isFetchingCurrentUser,
+  );
   useEffect(() => {
     dispatch(operationsAuth.fetchCurrentUser());
   }, [dispatch]);
   return (
     <>
-      {isFetchingCurrentUser ? <h1>Loading...</h1> : <><AppBar />
-      <Suspense fallback={<p>Loading...</p>}>
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <PublickRoute>
-                <HomePageView />
-              </PublickRoute>
-            }
-          />
-          <Route
-            exact
-            path="/contacts"
-            element={
-              <PrivateRoute>
-                <PhonebookView />
-              </PrivateRoute>
-            }
-          ></Route>
-          <Route
-            exact
-            path="/registration"
-            element={
-              <PublickRoute restricted>
-                <RegistrationView />
-              </PublickRoute>
-            }
-          />
-          <Route
-            exact
-            path="/login"
-            element={
-              <PublickRoute restricted redirectTo={'/contacts'}>
-                <LoginView />
-              </PublickRoute>
-            }
-          />
-        </Routes>
-      </Suspense></>}
+      {isFetchingCurrentUser ? (
+        <h1>Loading...</h1>
+      ) : (
+        <>
+          <AppBar />
+          <Suspense fallback={<p>Loading...</p>}>
+            <Routes>
+              <Route
+                exact
+                path="/"
+                element={
+                  <PublickRoute>
+                    <HomePageView />
+                  </PublickRoute>
+                }
+              />
+              <Route
+                exact
+                path="/contacts"
+                element={
+                  <PrivateRoute>
+                    <PhonebookView />
+                  </PrivateRoute>
+                }
+              ></Route>
+              <Route
+                exact
+                path="/registration"
+                element={
+                  <PublickRoute restricted>
+                    <RegistrationView />
+                  </PublickRoute>
+                }
+              />
+              <Route
+                exact
+                path="/login"
+                element={
+                  <PublickRoute restricted redirectTo={'/contacts'}>
+                    <LoginView />
+                  </PublickRoute>
+                }
+              />
+            </Routes>
+          </Suspense>
+        </>
+      )}
     </>
   );
 }

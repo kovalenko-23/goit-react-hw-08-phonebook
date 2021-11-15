@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import operationsAuth from '../../redux/auth/auth-operations';
 import { Name, Container } from './UserMenu.styled';
+import authSelectors from '../../redux/auth/auth-selectors';
 
 export default function UserMenu() {
   const dispatch = useDispatch();
-  const name = useSelector(state => state.authReducer.user.name);
+  const name = useSelector(authSelectors.getUsername);
 
   return (
     <Container>

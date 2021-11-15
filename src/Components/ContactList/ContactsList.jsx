@@ -2,9 +2,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import ContactsItem from '../ContactsItem/ContactsItem';
 import { List } from './ContactList.styled';
-import { getFilter } from '../../redux/phonebook/phonebook-selectors';
 import operationsContact from '../../redux/phonebook/phonebook-operations';
-import { getContacts } from '../../redux/phonebook/phonebook-selectors';
+import {
+  getContacts,
+  getFilter,
+} from '../../redux/phonebook/phonebook-selectors';
 
 const ContactsList = () => {
   const filter = useSelector(getFilter);
@@ -14,7 +16,6 @@ const ContactsList = () => {
   }, [dispatch]);
 
   const contacts = useSelector(getContacts);
-  console.log(contacts);
   const visibleContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter),
   );

@@ -16,21 +16,25 @@ const register = createAsyncThunk('auth/register', async credentials => {
   try {
     const { data } = await axios.post('/users/signup', credentials);
     token.set(data.token);
+    console.log(data);
     return data;
   } catch (error) {
     //   show error
   }
 });
 
-const login = createAsyncThunk('auth/login', async credentials => {
-  try {
-    const { data } = await axios.post('/users/login', credentials);
-    token.set(data.token);
-    return data;
-  } catch (error) {
-    //   show error
-  }
-});
+const login = createAsyncThunk(
+  'auth/login',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post('/users/login', credentials);
+      token.set(data.token);
+      return data;
+    } catch (error) {
+      return rejectWithValue();
+    }
+  },
+);
 
 const logout = createAsyncThunk('auth/logout', async credentials => {
   try {
